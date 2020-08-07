@@ -1,4 +1,4 @@
-## Azure NetAppFiles SDK NFS 4.1 Sample for .NETCore Changelog
+## Azure NetAppFiles Cross-Region Replication (CRR) SDK NFS 4.1 Sample .NETCore
 
 [1.0.0 (2019-10-09)](#1.0.0 (2019-10-09))
 
