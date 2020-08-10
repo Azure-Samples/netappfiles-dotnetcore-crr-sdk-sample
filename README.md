@@ -65,7 +65,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
 # What is anf-dotnetcore-crr-sdk-nfs4.1-sample.dll doing? 
 
-This sample project is dedicated to demonstrate how to deploy a cross-region replication in Azure NetApp Files that uses NFS v4.1 protocol, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using standard service level tier and an NFS protocol in the Source ANF, and Data Replication Volume with the same properties in the destination ANF. 
+This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for a NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using standard service level tier in the Source ANF, and Data Replication Volume with the same properties in the destination region. 
 
 # How the project is structured
 
