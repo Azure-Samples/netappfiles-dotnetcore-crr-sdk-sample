@@ -3,7 +3,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace anf_dotnetcore_crr_sdk_sample.Model
+namespace Microsoft.Azure.Management.ANF.Samples.Model
 {
     /// <summary>
     /// Creates an instance of AzureAuthInfo. This is used to read the contents of azureauth.json to perform SP authentication

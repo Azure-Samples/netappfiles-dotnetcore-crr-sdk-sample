@@ -2,15 +2,14 @@
 //
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
-namespace anf_dotnetcore_crr_sdk_sample.Common
+namespace Microsoft.Azure.Management.ANF.Samples.Common
 {
+    using Microsoft.Azure.Management.NetApp;
+    using Microsoft.Azure.Management.NetApp.Models;
+    using Microsoft.Azure.Management.ResourceManager.Models;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.Identity.Client;
-    using Microsoft.Rest;
-    using Microsoft.Rest.Azure;
 
     /// <summary>
     /// Contains public methods to get configuration settigns, to initiate authentication, output error results, etc.
@@ -223,5 +222,66 @@ namespace anf_dotnetcore_crr_sdk_sample.Common
 
             return ret;
         }
+
+        /// <summary>
+        /// Function used to wait for a specific ANF resource complete its deletion and ARM caching gets cleared
+        /// </summary>
+        /// <typeparam name="T">Resource Types as Snapshot, Volume, CapacityPool, and NetAppAccount</typeparam>
+        /// <param name="client">ANF Client</param>
+        /// <param name="resourceId">Resource Id of the resource being waited for being deleted</param>
+        /// <param name="intervalInSec">Time in seconds that the sample will poll to check if the resource got deleted or not. Defaults to 10 seconds.</param>
+        /// <param name="retries">How many retries before exting the wait for no resource function. Defaults to 60 retries.</param>
+        /// <returns></returns>
+        static public async Task WaitForAnfResource<T>(AzureNetAppFilesManagementClient client, string resourceId, int intervalInSec = 10, int retries = 60)
+        {
+            bool isFound = false;
+
+            for (int i = 0; i < retries; i++)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(intervalInSec));
+
+                try
+                {                         
+                    if (typeof(T) == typeof(NetAppAccount))
+                    {
+                        await client.Accounts.GetAsync(ResourceUriUtils.GetResourceGroup(resourceId),
+                            ResourceUriUtils.GetAnfAccount(resourceId));                        
+                    }                    
+                    else if (typeof(T) == typeof(CapacityPool))
+                    {
+                        await client.Pools.GetAsync(ResourceUriUtils.GetResourceGroup(resourceId),
+                            ResourceUriUtils.GetAnfAccount(resourceId),
+                            ResourceUriUtils.GetAnfCapacityPool(resourceId));
+                        
+                    }
+                    else if (typeof(T) == typeof(Volume))
+                    {
+                        await client.Volumes.GetAsync(ResourceUriUtils.GetResourceGroup(resourceId),
+                            ResourceUriUtils.GetAnfAccount(resourceId),
+                            ResourceUriUtils.GetAnfCapacityPool(resourceId),
+                            ResourceUriUtils.GetAnfVolume(resourceId));
+                       
+                    }
+                    else if (typeof(T) == typeof(Snapshot))
+                    {
+                        await client.Snapshots.GetAsync(ResourceUriUtils.GetResourceGroup(resourceId),
+                            ResourceUriUtils.GetAnfAccount(resourceId),
+                            ResourceUriUtils.GetAnfCapacityPool(resourceId),
+                            ResourceUriUtils.GetAnfVolume(resourceId),
+                            ResourceUriUtils.GetAnfSnapshot(resourceId));                        
+                    }
+                    isFound = true;
+                    break;
+                }
+                catch
+                {  
+                   continue;
+                }                
+            }
+            if (!isFound)
+                throw new Exception($"Resource: {resourceId} is not found");
+
+        }
     }
 }
+

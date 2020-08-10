@@ -1,7 +1,7 @@
 ﻿
-namespace anf_dotnetcore_crr_sdk_sample
+namespace Microsoft.Azure.Management.ANF.Samples
 {
-    using anf_dotnetcore_crr_sdk_sample.Common;
+    using Microsoft.Azure.Management.ANF.Samples.Common;
     using Microsoft.Azure.Management.NetApp;
     using Microsoft.Azure.Management.NetApp.Models;
     using Microsoft.Azure.Management.ResourceManager;
@@ -9,39 +9,61 @@ namespace anf_dotnetcore_crr_sdk_sample
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using static anf_dotnetcore_crr_sdk_sample.Common.Utils;
+    using static Microsoft.Azure.Management.ANF.Samples.Common.Utils;
 
     class Program
     {
-       //------------------------------------------IMPORTANT------------------------------------------------------------------
-       // Setting variables necessary for resources creation - change these to appropriated values related to your environment
-       // Please NOTE: Resource Group and VNETs need to be created prior to run this code
-       //----------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------IMPORTANT------------------------------------------------------------------
+        // Setting variables necessary for resources creation - change these to appropriated values related to your environment
+        // Please NOTE: Resource Group and VNETs need to be created prior to run this code
+        //----------------------------------------------------------------------------------------------------------------------
 
         // Subscription - Change SubId below
-        const string subscriptionId = "[Subscription ID here]";
+        //const string subscriptionId = "[Subscription ID here]";
+
+        //// Primary ANF
+        //const string primaryResourceGroupName = "[Primary Resource Group Name]";
+        //const string primaryLocation = "[Primary Resources Location]";
+        //const string primaryVNETName = "[Primary VNET Name]";
+        //const string primarySubnetName = "[Primary SubNet Name]";
+        //const string primaryAnfAccountName = "[Primary ANF Account name]";
+        //const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+
+        //// Secondary ANF
+        //const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
+        //const string secondaryLocation = "[Secondary Resources Location]";
+        //const string secondaryVNETName = "[Secondary VNET Name]";
+        //const string secondarySubnetName = "[Secondary SubNet Name]";
+        //const string secondaryAnfAccountName = "[Secondary ANF Account name]";
+        //const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
+
+        ////ANF Properties
+        //const string capacityPoolServiceLevel = "Standard";
+        //const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
+        //const long volumeSize = 107374182400;  // 100GiB - volume minimum size
+
+        const string subscriptionId = "0661b131-4a11-479b-96bf-2f95acca2f73";
 
         // Primary ANF
-        const string primaryResourceGroupName = "[Primary Resource Group Name]";
-        const string primaryLocation = "[Primary Resources Location]";
-        const string primaryVNETName = "[Primary VNET Name]";
-        const string primarySubnetName = "[Primary SubNet Name]";
-        const string primaryAnfAccountName = "[Primary ANF Account name]";
-        const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+        const string primaryResourceGroupName = "adghabbotest-RG";
+        const string primaryLocation = "westus";
+        const string primaryVNETName = "adghabbotest-RG-vnet";
+        const string primarySubnetName = "anf01-sn";
+        const string primaryAnfAccountName = "primaryanfacc01";
+        const string primarycapacityPoolName = "primarypool01";
 
         // Secondary ANF
-        const string secondaryResourceGroupName = "[Primary Resource Group Name]";
-        const string secondaryLocation = "[Primary Resources Location]";
-        const string secondaryVNETName = "[Primary VNET Name]";
-        const string secondarySubnetName = "[Primary SubNet Name]";
-        const string secondaryAnfAccountName = "[Primary ANF Account name]";
-        const string secondarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+        const string secondaryResourceGroupName = "adghabbotest2-rg";
+        const string secondaryLocation = "eastus";
+        const string secondaryVNETName = "adghabbotest2-rg-vnet";
+        const string secondarySubnetName = "anf02-sn";
+        const string secondaryAnfAccountName = "secondaryanfacc02";
+        const string secondarycapacityPoolName = "secondarypool02";
 
         //ANF Properties
         const string capacityPoolServiceLevel = "Standard";
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
         const long volumeSize = 107374182400;  // 100GiB - volume minimum size
-
 
 
         private static ServiceClientCredentials Credentials { get; set; }
@@ -78,9 +100,9 @@ namespace anf_dotnetcore_crr_sdk_sample
             // Instantiating a new ANF management client
             //------------------------------------------
             WriteConsoleMessage("Instantiating a new Azure NetApp Files management client...");
-            AzureNetAppFilesManagementClient anfClient = new AzureNetAppFilesManagementClient(Credentials) 
-            { 
-                SubscriptionId = subscriptionId 
+            AzureNetAppFilesManagementClient anfClient = new AzureNetAppFilesManagementClient(Credentials)
+            {
+                SubscriptionId = subscriptionId
             };
             WriteConsoleMessage($"\tApi Version: {anfClient.ApiVersion}");
 
@@ -145,6 +167,9 @@ namespace anf_dotnetcore_crr_sdk_sample
             var primaryVolume = await anfClient.Volumes.CreateOrUpdateAsync(primaryVolumeBody, primaryResourceGroupName, primaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(primaryCapacityPool.Id), primaryVolumeName);
             WriteConsoleMessage($"\tVolume Resource Id: {primaryVolume.Id}");
 
+            WriteConsoleMessage($"Waiting for {primaryVolume.Id} to be available...");
+            await ResourceUriUtils.WaitForAnfResource<Volume>(anfClient, primaryVolume.Id);
+
 
             //----------------------
             // Creating ANF Secondary Account
@@ -188,9 +213,9 @@ namespace anf_dotnetcore_crr_sdk_sample
                         EndpointType = "dst",
                         RemoteVolumeRegion = primaryLocation,
                         RemoteVolumeResourceId = primaryVolume.Id,
-                        ReplicationSchedule = "hourly"                        
+                        ReplicationSchedule = "hourly"
                     }
-                }               
+                }
             };
 
 
@@ -200,25 +225,22 @@ namespace anf_dotnetcore_crr_sdk_sample
 
             // Creating NFS 4.1 Data Replication Volume
             WriteConsoleMessage("Adding Data Replication in Destination region...");
-            var dataReplicationVolume = await anfClient.Volumes.CreateOrUpdateAsync(secondaryVolumeBody,secondaryResourceGroupName, anfSecondaryAccount.Name, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
+            var dataReplicationVolume = await anfClient.Volumes.CreateOrUpdateAsync(secondaryVolumeBody, secondaryResourceGroupName, anfSecondaryAccount.Name, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
+            await ResourceUriUtils.WaitForAnfResource<Volume>(anfClient, dataReplicationVolume.Id);
 
+            WriteConsoleMessage($"Waiting for {dataReplicationVolume.Id} to be available...");
+            await ResourceUriUtils.WaitForAnfResource<Volume>(anfClient, dataReplicationVolume.Id);
 
             //--------------------------
             // Authorizing Source volume
             //--------------------------
-
-            // to make sure data replication volume in the destination account is in Active State 
-            while (dataReplicationVolume.ProvisioningState == "Succeeded")
+            AuthorizeRequest authRequest = new AuthorizeRequest()
             {
-                AuthorizeRequest authRequest = new AuthorizeRequest()
-                {
-                    RemoteVolumeResourceId = dataReplicationVolume.Id
-                };
-                WriteConsoleMessage("Authorizing replication in Source region...");
-                await anfClient.Volumes.AuthorizeReplicationAsync(primaryResourceGroupName, primaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(primaryCapacityPool.Id), primaryVolumeName, authRequest);
-                break;
-            }
-            
+                RemoteVolumeResourceId = dataReplicationVolume.Id
+            };
+            WriteConsoleMessage("Authorizing replication in Source region...");
+            await anfClient.Volumes.AuthorizeReplicationAsync(primaryResourceGroupName, primaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(primaryCapacityPool.Id), primaryVolumeName, authRequest);
+
             WriteConsoleMessage("ANF Cross-Region Replication has completed successfully");
 
         }

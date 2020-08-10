@@ -3,7 +3,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace anf_dotnetcore_crr_sdk_sample.Common
+namespace Microsoft.Azure.Management.ANF.Samples.Common
 {
 
     using System;

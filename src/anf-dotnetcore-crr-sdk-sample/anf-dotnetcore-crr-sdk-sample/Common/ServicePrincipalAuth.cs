@@ -3,28 +3,20 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace anf_dotnetcore_crr_sdk_sample.Common
+namespace Microsoft.Azure.Management.ANF.Samples.Common
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Threading.Tasks;
-    using anf_dotnetcore_crr_sdk_sample.Model;
-    //using Microsoft.Azure.Management.NetApp.Models;
-    //using Microsoft.Azure.Management.ANF.Samples.Model;
-    using Microsoft.Identity.Client;
+    using Microsoft.Azure.Management.ANF.Samples.Model;
     using Microsoft.Rest;
-    using Microsoft.Rest.Azure;
     using Microsoft.Rest.Azure.Authentication;
     using Newtonsoft.Json;
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Contains public methods to get configuration settigns, to initiate authentication, output error results, etc.
     /// </summary>
-    
+
     public static class ServicePrincipalAuth
     {
         /// <summary>
