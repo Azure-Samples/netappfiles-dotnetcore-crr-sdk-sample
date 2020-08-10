@@ -18,24 +18,47 @@ namespace Microsoft.Azure.Management.ANF.Samples
         // Please NOTE: Resource Group and VNETs need to be created prior to run this code
         //----------------------------------------------------------------------------------------------------------------------
 
-        //Subscription - Change SubId below
-        const string subscriptionId = "[Subscription ID here]";
+        // Subscription - Change SubId below
+        //const string subscriptionId = "[Subscription ID here]";
+
+        //// Primary ANF
+        //const string primaryResourceGroupName = "[Primary Resource Group Name]";
+        //const string primaryLocation = "[Primary Resources Location]";
+        //const string primaryVNETName = "[Primary VNET Name]";
+        //const string primarySubnetName = "[Primary SubNet Name]";
+        //const string primaryAnfAccountName = "[Primary ANF Account name]";
+        //const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+
+        //// Secondary ANF
+        //const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
+        //const string secondaryLocation = "[Secondary Resources Location]";
+        //const string secondaryVNETName = "[Secondary VNET Name]";
+        //const string secondarySubnetName = "[Secondary SubNet Name]";
+        //const string secondaryAnfAccountName = "[Secondary ANF Account name]";
+        //const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
+
+        ////ANF Properties
+        //const string capacityPoolServiceLevel = "Standard";
+        //const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
+        //const long volumeSize = 107374182400;  // 100GiB - volume minimum size
+
+        const string subscriptionId = "0661b131-4a11-479b-96bf-2f95acca2f73";
 
         // Primary ANF
-        const string primaryResourceGroupName = "[Primary Resource Group Name]";
-        const string primaryLocation = "[Primary Resources Location]";
-        const string primaryVNETName = "[Primary VNET Name]";
-        const string primarySubnetName = "[Primary SubNet Name]";
-        const string primaryAnfAccountName = "[Primary ANF Account name]";
-        const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+        const string primaryResourceGroupName = "adghabbotest-RG";
+        const string primaryLocation = "westus";
+        const string primaryVNETName = "adghabbotest-RG-vnet";
+        const string primarySubnetName = "anf01-sn";
+        const string primaryAnfAccountName = "primaryanfacc01";
+        const string primarycapacityPoolName = "primarypool01";
 
         // Secondary ANF
-        const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
-        const string secondaryLocation = "[Secondary Resources Location]";
-        const string secondaryVNETName = "[Secondary VNET Name]";
-        const string secondarySubnetName = "[Secondary SubNet Name]";
-        const string secondaryAnfAccountName = "[Secondary ANF Account name]";
-        const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
+        const string secondaryResourceGroupName = "adghabbotest2-rg";
+        const string secondaryLocation = "eastus";
+        const string secondaryVNETName = "adghabbotest2-rg-vnet";
+        const string secondarySubnetName = "anf02-sn";
+        const string secondaryAnfAccountName = "secondaryanfacc02";
+        const string secondarycapacityPoolName = "secondarypool02";
 
         //ANF Properties
         const string capacityPoolServiceLevel = "Standard";
