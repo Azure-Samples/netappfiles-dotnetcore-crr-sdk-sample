@@ -10,7 +10,7 @@ description: "This project demonstrates how to use dotnet-core with NetApp Files
 
 # Azure NetAppFiles Cross-Region Replication (CRR) SDK NFS 4.1 Sample .NETCore
 
-This project demonstrates how to deploy a volume enabled with NFS 4.1 protocol using dotnet-core language and Azure NetApp Files SDK.
+This project demonstrates how to deploy a cross-region replication with enabled with NFS 4.1 protocol volume using dotnet-core language and Azure NetApp Files SDK.
 
 In this sample application we perform the following operations:
 
@@ -22,8 +22,7 @@ In this sample application we perform the following operations:
  * Secondary ANF Account
 	| Secondary Capacity pool
 		| Secondary NFS v.1 Data Replication Volume with referencing to the primary volume Resource ID
-		
-		
+			
  * Authorize Source volume with Desitnation Volume Resource ID
 
 
@@ -86,8 +85,8 @@ The following table describes all files within this solution:
     ```powershell
     git clone https://github.com/Azure-Samples/netappfiles-dotnetcore-nfs4.1-sdk-sample.git
     ```
-1. Make sure you change the variables located at **.netappfiles-dotnetcore-nfs4.1-sdk-sample\src\anf-dotnetcore-sdk-nfs4.1-sample\program.cs at RunAsync method.**
-1. Change folder to **.netappfiles-dotnetcore-nfs4.1-sdk-sample\src\anf-dotnetcore-sdk-nfs4.1-sample**
+1. Make sure you change the variables located at **.netappfiles-dotnetcore-crr-sdk-sample\src\anf-dotnetcore-crr-sdk-sample\anf-dotnetcore-crr-sdk-sample\program.cs at RunAsync method.**
+1. Change folder to **.netappfiles-dotnetcore-crr-sdk-sample\src\anf-dotnetcore-crr-sdk-sample**
 1. Since we're using service principal authentication flow, make sure you have the **azureauth.json** and its environment variable with the path to it defined (as previously described)
 1. Build the console application
     ```powershell
