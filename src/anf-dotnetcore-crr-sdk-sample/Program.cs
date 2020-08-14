@@ -28,6 +28,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string primarySubnetName = "[Primary SubNet Name]";
         const string primaryAnfAccountName = "[Primary ANF Account name]";
         const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+        const string primaryCapacityPoolServiceLevel = "Standard";
 
         // Secondary ANF
         const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
@@ -36,9 +37,9 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string secondarySubnetName = "[Secondary SubNet Name]";
         const string secondaryAnfAccountName = "[Secondary ANF Account name]";
         const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
+        const string secondaryCapacityPoolServiceLevel = "Standard";
 
-        //ANF Properties
-        const string capacityPoolServiceLevel = "Standard";
+        //Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
         const long volumeSize = 107374182400;  // 100GiB - volume minimum size
 
@@ -97,7 +98,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
             CapacityPool primaryCapacityPoolBody = new CapacityPool()
             {
                 Location = primaryLocation.ToLower(), // Important: location needs to be lower case
-                ServiceLevel = capacityPoolServiceLevel,
+                ServiceLevel = ServiceLevel.Premium, //Service level can be one of three levels -> { Standard, Premium, Ultra }
                 Size = capacitypoolSize
             };
             WriteConsoleMessage("Requesting capacity pool to be created for Primary Account");
@@ -131,7 +132,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
             {
                 ExportPolicy = exportPolicies,
                 Location = primaryLocation.ToLower(),
-                ServiceLevel = capacityPoolServiceLevel,
+                ServiceLevel = ServiceLevel.Premium, //Service level can be one of three levels -> { Standard, Premium, Ultra }
                 CreationToken = primaryVolumeName,
                 SubnetId = primarySubnetId,
                 UsageThreshold = volumeSize,
@@ -161,7 +162,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
             CapacityPool secondaryCapacityPoolBody = new CapacityPool()
             {
                 Location = secondaryLocation.ToLower(), // Important: location needs to be lower case
-                ServiceLevel = capacityPoolServiceLevel,
+                ServiceLevel = ServiceLevel.Standard, //Service level can be one of three levels -> { Standard, Premium, Ultra }
                 Size = capacitypoolSize
             };
             WriteConsoleMessage("Requesting capacity pool to be created for Secondary Account");
@@ -177,7 +178,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
             {
                 ExportPolicy = exportPolicies,
                 Location = secondaryLocation.ToLower(),
-                ServiceLevel = capacityPoolServiceLevel,
+                ServiceLevel = ServiceLevel.Standard, //Service level can be one of three levels -> { Standard, Premium, Ultra },
                 CreationToken = secondaryVolumeName,
                 SubnetId = secondarySubnetId,
                 UsageThreshold = volumeSize,
