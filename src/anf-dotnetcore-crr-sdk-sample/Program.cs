@@ -202,8 +202,8 @@ namespace Microsoft.Azure.Management.ANF.Samples
             // Creating NFS 4.1 Data Replication Volume
             WriteConsoleMessage("Adding Data Replication in Destination region...");
             var dataReplicationVolume = await anfClient.Volumes.CreateOrUpdateAsync(secondaryVolumeBody, secondaryResourceGroupName, anfSecondaryAccount.Name, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
-            await ResourceUriUtils.WaitForAnfResource<Volume>(anfClient, dataReplicationVolume.Id);
-
+            
+            //Wait for Data Replication Volume to get be ready
             WriteConsoleMessage($"Waiting for {dataReplicationVolume.Id} to be available...");
             await ResourceUriUtils.WaitForAnfResource<Volume>(anfClient, dataReplicationVolume.Id);
 

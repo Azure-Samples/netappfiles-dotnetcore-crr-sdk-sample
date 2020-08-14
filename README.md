@@ -50,7 +50,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
         >Note: this command will automatically assign RBAC contributor role to the service principal at subscription level, you can narrow down the scope to the specific resource group where your tests will create the resources.
 
-    1. Copy the output content and paste it in a file called azureauth.json and secure it with file system permissions
+    1. Copy the output content and paste it in a file called azureauth.json, secure it with file system permissions and save it outside the tree related of your 	local git repo folder so the file doesn't get commited. 
     1. Set an environment variable pointing to the file path you just created, here is an example with Powershell and bash:
         Powershell 
         ```powershell
@@ -85,7 +85,7 @@ The following table describes all files within this solution:
     ```powershell
     git clone https://github.com/Azure-Samples/netappfiles-dotnetcore-nfs4.1-sdk-sample.git
     ```
-1. Make sure you change the variables located at **.netappfiles-dotnetcore-crr-sdk-sample\src\anf-dotnetcore-crr-sdk-sample\anf-dotnetcore-crr-sdk-sample\program.cs at RunAsync method.**
+1. Make sure you change the variables located at **.netappfiles-dotnetcore-crr-sdk-sample\src\anf-dotnetcore-crr-sdk-sample\program.cs at RunAsync method.**
 1. Change folder to **.netappfiles-dotnetcore-crr-sdk-sample\src\anf-dotnetcore-crr-sdk-sample**
 1. Since we're using service principal authentication flow, make sure you have the **azureauth.json** and its environment variable with the path to it defined (as previously described)
 1. Build the console application
