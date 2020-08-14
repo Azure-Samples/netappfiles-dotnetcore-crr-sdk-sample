@@ -28,8 +28,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string primarySubnetName = "[Primary SubNet Name]";
         const string primaryAnfAccountName = "[Primary ANF Account name]";
         const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
-        const string primaryCapacityPoolServiceLevel = "Standard";
-
+        
         // Secondary ANF
         const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
         const string secondaryLocation = "[Secondary Resources Location]";
@@ -37,8 +36,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string secondarySubnetName = "[Secondary SubNet Name]";
         const string secondaryAnfAccountName = "[Secondary ANF Account name]";
         const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
-        const string secondaryCapacityPoolServiceLevel = "Standard";
-
+        
         //Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
         const long volumeSize = 107374182400;  // 100GiB - volume minimum size
