@@ -28,7 +28,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string primarySubnetName = "[Primary SubNet Name]";
         const string primaryAnfAccountName = "[Primary ANF Account name]";
         const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
-        
+
         // Secondary ANF
         const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
         const string secondaryLocation = "[Secondary Resources Location]";
@@ -36,7 +36,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string secondarySubnetName = "[Secondary SubNet Name]";
         const string secondaryAnfAccountName = "[Secondary ANF Account name]";
         const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
-        
+
         //Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
         const long volumeSize = 107374182400;  // 100GiB - volume minimum size
@@ -218,6 +218,44 @@ namespace Microsoft.Azure.Management.ANF.Samples
 
             WriteConsoleMessage("ANF Cross-Region Replication has completed successfully");
 
+
+            //-----------------------------------------
+            // Clean up Resources
+            //-----------------------------------------
+
+            //// Delete replication and send confirmation to Source volume
+            //WriteConsoleMessage("Deleting the replication connection on the destination volume");
+            //await anfClient.Volumes.DeleteReplicationAsync(secondaryResourceGroupName, secondaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
+
+            //// Delete secondary ANF resources
+            //WriteConsoleMessage("Deleting Secondary ANF resources...");
+            //WriteConsoleMessage("Deleting Secondary Volume");
+            //await anfClient.Volumes.DeleteAsync(secondaryResourceGroupName, secondaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
+            //// Wait for Data replication volume to be fully deleted
+            //await ResourceUriUtils.WaitForNoAnfResource<Volume>(anfClient, dataReplicationVolume.Id);
+            //// Delete secondary Capacity Pool
+            //WriteConsoleMessage("Deleting Secondary Capacity Pool");
+            //await anfClient.Pools.DeleteAsync(secondaryResourceGroupName, secondaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id));
+            //// wait for secondary Capacity Pool to be fully deleted 
+            //await ResourceUriUtils.WaitForNoAnfResource<CapacityPool>(anfClient, secondaryCapacityPool.Id);
+            //// Delete Secondary ANF account
+            //WriteConsoleMessage("Deleting Secondary Account");
+            //await anfClient.Accounts.DeleteAsync(secondaryResourceGroupName, secondaryAnfAccountName);
+
+            //// Delete primary ANF resources
+            //WriteConsoleMessage("Deleting Primary ANF resources...");
+            //WriteConsoleMessage("Deleting Primary Volume");
+            //await anfClient.Volumes.DeleteAsync(primaryResourceGroupName, primaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(primaryCapacityPool.Id), primaryVolumeName);
+            //// Wait for primary Volume to be fully deleted
+            //await ResourceUriUtils.WaitForNoAnfResource<Volume>(anfClient, primaryVolume.Id);
+            //// Delete primary capacity pool
+            //WriteConsoleMessage("Deleting Primary Capacity Pool");
+            //await anfClient.Pools.DeleteAsync(primaryResourceGroupName, primaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(primaryCapacityPool.Id));
+            //// Wait for primary capacity pool to be fully deleted
+            //await ResourceUriUtils.WaitForNoAnfResource<CapacityPool>(anfClient, primaryCapacityPool.Id);
+            //// Delete Primary ANF account
+            //WriteConsoleMessage("Deleting Primary Account");
+            //await anfClient.Accounts.DeleteAsync(primaryResourceGroupName, primaryAnfAccountName);
         }
     }
 }
