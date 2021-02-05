@@ -9,6 +9,7 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
     using Microsoft.Azure.Management.ResourceManager.Models;
     using System;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -241,18 +242,18 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(intervalInSec));
 
                 try
-                {                         
+                {
                     if (typeof(T) == typeof(NetAppAccount))
                     {
                         await client.Accounts.GetAsync(ResourceUriUtils.GetResourceGroup(resourceId),
-                            ResourceUriUtils.GetAnfAccount(resourceId));                        
-                    }                    
+                            ResourceUriUtils.GetAnfAccount(resourceId));
+                    }
                     else if (typeof(T) == typeof(CapacityPool))
                     {
                         await client.Pools.GetAsync(ResourceUriUtils.GetResourceGroup(resourceId),
                             ResourceUriUtils.GetAnfAccount(resourceId),
                             ResourceUriUtils.GetAnfCapacityPool(resourceId));
-                        
+
                     }
                     else if (typeof(T) == typeof(Volume))
                     {
@@ -260,7 +261,7 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
                             ResourceUriUtils.GetAnfAccount(resourceId),
                             ResourceUriUtils.GetAnfCapacityPool(resourceId),
                             ResourceUriUtils.GetAnfVolume(resourceId));
-                       
+
                     }
                     else if (typeof(T) == typeof(Snapshot))
                     {
@@ -268,15 +269,15 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
                             ResourceUriUtils.GetAnfAccount(resourceId),
                             ResourceUriUtils.GetAnfCapacityPool(resourceId),
                             ResourceUriUtils.GetAnfVolume(resourceId),
-                            ResourceUriUtils.GetAnfSnapshot(resourceId));                        
+                            ResourceUriUtils.GetAnfSnapshot(resourceId));
                     }
                     isFound = true;
                     break;
                 }
                 catch
-                {  
-                   continue;
-                }                
+                {
+                    continue;
+                }
             }
             if (!isFound)
                 throw new Exception($"Resource: {resourceId} is not found");
@@ -297,7 +298,6 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
             for (int i = 0; i < retries; i++)
             {
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(intervalInSec));
-
                 try
                 {
                     if (typeof(T) == typeof(Snapshot))
@@ -336,6 +336,66 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
                     }
                     throw;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Waits for replication to become in status "Mirrored"
+        /// </summary>
+        /// <param name="client">ANF Client</param>
+        /// <param name="resourceId">Resource Id of the resource being waited for being deleted</param>
+        /// <param name="intervalInSec">Time in seconds that the sample will poll to check if the resource got deleted or not. Defaults to 10 seconds.</param>
+        /// <param name="retries">How many retries before exting the wait for no resource function. Defaults to 60 retries.</param>
+        /// <returns></returns>
+        static public async Task WaitForCompleteReplicationStatus(AzureNetAppFilesManagementClient client, string resourceId, int intervalInSec = 10, int retries = 60)
+        {
+            for (int i = 0; i < retries; i++)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(intervalInSec));
+                try
+                {
+                    var status = await client.Volumes.ReplicationStatusMethodAsync(ResourceUriUtils.GetResourceGroup(resourceId),
+                        ResourceUriUtils.GetAnfAccount(resourceId),
+                        ResourceUriUtils.GetAnfCapacityPool(resourceId),
+                        ResourceUriUtils.GetAnfVolume(resourceId));
+                    if (status.MirrorState.ToLower().Equals("mirrored"))
+                        break;
+                }
+                catch (Exception ex)
+                {
+                    if (!(ex.Message.ToLower().Contains("creating") && ex.Message.ToLower().Contains("replication")))
+                        throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Waits for replication to become in "Broken" status
+        /// </summary>
+        /// <param name="client">ANF Client</param>
+        /// <param name="resourceId">Resource Id of the resource being waited for being deleted</param>
+        /// <param name="intervalInSec">Time in seconds that the sample will poll to check if the resource got deleted or not. Defaults to 10 seconds.</param>
+        /// <param name="retries">How many retries before exting the wait for no resource function. Defaults to 60 retries.</param>
+        /// <returns></returns>
+        static public async Task WaitForBrokenReplicationStatus(AzureNetAppFilesManagementClient client, string resourceId, int intervalInSec = 10, int retries = 60)
+        {
+            for (int i = 0; i < retries; i++)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(intervalInSec));
+                try
+                {
+                    var status = await client.Volumes.ReplicationStatusMethodAsync(ResourceUriUtils.GetResourceGroup(resourceId),
+                        ResourceUriUtils.GetAnfAccount(resourceId),
+                        ResourceUriUtils.GetAnfCapacityPool(resourceId),
+                        ResourceUriUtils.GetAnfVolume(resourceId));
+                    if (status.MirrorState.ToLower().Equals("broken"))
+                        break;
+                }
+                catch
+                {
+                    throw;
+                }
+
             }
         }
     }

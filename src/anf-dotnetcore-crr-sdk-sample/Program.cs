@@ -28,6 +28,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string primarySubnetName = "[Primary SubNet Name]";
         const string primaryAnfAccountName = "[Primary ANF Account name]";
         const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
+        const string primaryVolumeName = "[Primary ANF Volume name]";
 
         // Secondary ANF
         const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
@@ -36,6 +37,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
         const string secondarySubnetName = "[Secondary SubNet Name]";
         const string secondaryAnfAccountName = "[Secondary ANF Account name]";
         const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
+        const string secondaryVolumeName = "[Secondary ANF Volume name]";
 
         // Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
@@ -126,9 +128,6 @@ namespace Microsoft.Azure.Management.ANF.Samples
 
             // Creating primary volume body object
             string primarySubnetId = $"/subscriptions/{subscriptionId}/resourceGroups/{primaryResourceGroupName}/providers/Microsoft.Network/virtualNetworks/{primaryVNETName}/subnets/{primarySubnetName}";
-            string primaryVolumeName = $"PrimaryVol01";
-            //string primaryVolumeName = $"PrimaryVol01-{primaryAnfAccountName}-{primarycapacityPoolName}";
-
             Volume primaryVolumeBody = new Volume()
             {
                 ExportPolicy = exportPolicies,
@@ -172,9 +171,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
 
             // Creating secondary volume body object
             string secondarySubnetId = $"/subscriptions/{subscriptionId}/resourceGroups/{secondaryResourceGroupName}/providers/Microsoft.Network/virtualNetworks/{secondaryVNETName}/subnets/{secondarySubnetName}";
-            //string secondaryVolumeName = $"Vol-{secondaryAnfAccountName}-{secondarycapacityPoolName}";
-            string secondaryVolumeName = $"SecondaryVol02";
-
+            
             Volume secondaryVolumeBody = new Volume()
             {
                 ExportPolicy = exportPolicies,
@@ -184,6 +181,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
                 SubnetId = secondarySubnetId,
                 UsageThreshold = volumeSize,
                 ProtocolTypes = new List<string>() { "NFSv4.1" },
+                VolumeType = "DataProtection",
                 DataProtection = new VolumePropertiesDataProtection()
                 {
                     Replication = new ReplicationObject()
@@ -191,7 +189,7 @@ namespace Microsoft.Azure.Management.ANF.Samples
                         EndpointType = "dst",
                         RemoteVolumeRegion = primaryLocation,
                         RemoteVolumeResourceId = primaryVolume.Id,
-                        ReplicationSchedule = "hourly"
+                        ReplicationSchedule = "_10minutely"
                     }
                 }
             };
@@ -218,7 +216,6 @@ namespace Microsoft.Azure.Management.ANF.Samples
             };
             WriteConsoleMessage("Authorizing replication in Source region...");
             await anfClient.Volumes.AuthorizeReplicationAsync(primaryResourceGroupName, primaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(primaryCapacityPool.Id), primaryVolumeName, authRequest);
-
             WriteConsoleMessage("ANF Cross-Region Replication has completed successfully");
 
             //-----------------------------------------
@@ -227,7 +224,19 @@ namespace Microsoft.Azure.Management.ANF.Samples
 
             if (shouldCleanUp)
             {
-                // Delete replication and send confirmation to Source volume
+                //Wait for replication status to be "Mirrored"
+                WriteConsoleMessage("Checking replication status to become Mirrored before start deleting...");
+                await ResourceUriUtils.WaitForCompleteReplicationStatus(anfClient, dataReplicationVolume.Id);
+
+                // Break the replication 
+                WriteConsoleMessage("Breaking the replication connection");
+                await anfClient.Volumes.BreakReplicationAsync(secondaryResourceGroupName, secondaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
+
+                // Check if replication status is "Broken"
+                WriteConsoleMessage("Checking replication status to become Broken... ");
+                await ResourceUriUtils.WaitForBrokenReplicationStatus(anfClient, dataReplicationVolume.Id);
+
+                // Delete replication and send confirmation to Source volume                
                 WriteConsoleMessage("Deleting the replication connection on the destination volume");
                 await anfClient.Volumes.DeleteReplicationAsync(secondaryResourceGroupName, secondaryAnfAccountName, ResourceUriUtils.GetAnfCapacityPool(secondaryCapacityPool.Id), secondaryVolumeName);
 
