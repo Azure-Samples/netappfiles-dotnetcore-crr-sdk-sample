@@ -15,17 +15,14 @@ This project demonstrates how to deploy a cross-region replication with enabled 
 In this sample application we perform the following operations:
 
 * Creation
-  * Primary ANF Account
-	| Primary Capacity pool 
-		| Primary NFS v4.1 Volume 
-		
- * Secondary ANF Account
-	| Secondary Capacity pool
-		| Secondary NFS v.1 Data Replication Volume with referencing to the primary volume Resource ID
-			
- * Authorize Source volume with Desitnation Volume Resource ID
- 
- * Finally, the clean up process takes place (not enabled by default, please change the variable shouldCleanUp to true at program.cs file if you want the clean up code to take a place),deleting all resources in the reverse order following the hierarchy otherwise we can't remove resources that have nested resources still live. You will also notice that the clean up process uses a function called WaitForNoANFResource, at this moment this is required so we can workaround a current ARM behavior of reporting that the object was deleted when in fact its deletion is still in progress.
+  * Primary NetApp account
+    * Primary capacity pool
+      * Primary NFS v3 volume
+  * Secondary NetApp account
+    * Secondary capacity pool
+      * Secondary NFS v3 Data Replication volume with reference to the primary volume Resource ID
+* Authorize primary volume with secondary volume Resource ID
+* Finally, the clean up process takes place (not enabled by default, please change the variable shouldCleanUp to true at program.cs file if you want the clean up code to take a place),deleting all resources in the reverse order following the hierarchy otherwise we can't remove resources that have nested resources still live. You will also notice that the clean up process uses a function called WaitForNoANFResource, at this moment this is required so we can workaround a current ARM behavior of reporting that the object was deleted when in fact its deletion is still in progress.
  
 
 If you don't already have a Microsoft Azure subscription, you can get a FREE trial account [here](http://go.microsoft.com/fwlink/?LinkId=330212).

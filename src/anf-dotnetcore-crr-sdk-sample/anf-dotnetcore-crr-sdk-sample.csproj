@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Core" Version="1.9.0" />
     <PackageReference Include="Microsoft.Azure.Management.NetApp" Version="1.9.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager" Version="3.9.0-preview" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0-preview.6.20305.6" />

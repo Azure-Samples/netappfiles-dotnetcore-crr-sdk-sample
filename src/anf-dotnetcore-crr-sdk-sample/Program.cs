@@ -19,32 +19,32 @@ namespace Microsoft.Azure.Management.ANF.Samples
         //----------------------------------------------------------------------------------------------------------------------
 
         // Subscription - Change SubId below
-        const string subscriptionId = "[Subscription ID here]";
+        const string subscriptionId = "f557b96d-2308-4a18-aae1-b8f7e7e70cc7";
 
         // Primary ANF
-        const string primaryResourceGroupName = "[Primary Resource Group Name]";
-        const string primaryLocation = "[Primary Resources Location]";
-        const string primaryVNETName = "[Primary VNET Name]";
-        const string primarySubnetName = "[Primary SubNet Name]";
-        const string primaryAnfAccountName = "[Primary ANF Account name]";
-        const string primarycapacityPoolName = "[Primary ANF Capacity Pool name]";
-        const string primaryVolumeName = "[Primary ANF Volume name]";
+        const string primaryResourceGroupName = "adghabboSource-rg";
+        const string primaryLocation = "CentralUS";
+        const string primaryVNETName = "sourcevnet";
+        const string primarySubnetName = "sourcesubnet";
+        const string primaryAnfAccountName = "anfaccountso";
+        const string primarycapacityPoolName = "pools";
+        const string primaryVolumeName = "vols";
 
         // Secondary ANF
-        const string secondaryResourceGroupName = "[Secondary Resource Group Name]";
-        const string secondaryLocation = "[Secondary Resources Location]";
-        const string secondaryVNETName = "[Secondary VNET Name]";
-        const string secondarySubnetName = "[Secondary SubNet Name]";
-        const string secondaryAnfAccountName = "[Secondary ANF Account name]";
-        const string secondarycapacityPoolName = "[Secondary ANF Capacity Pool name]";
-        const string secondaryVolumeName = "[Secondary ANF Volume name]";
+        const string secondaryResourceGroupName = "adghabboDestination-rg";
+        const string secondaryLocation = "EastUS2";
+        const string secondaryVNETName = "destinationvnet";
+        const string secondarySubnetName = "destinationsubnet";
+        const string secondaryAnfAccountName = "anfaccountd";
+        const string secondarycapacityPoolName = "poold";
+        const string secondaryVolumeName = "vold";
 
         // Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
         const long volumeSize = 107374182400;  // 100GiB - volume minimum size
 
         // If resources should be cleaned up
-        static readonly bool shouldCleanUp = false;
+        static readonly bool shouldCleanUp = true;
 
         private static ServiceClientCredentials Credentials { get; set; }
 
@@ -147,7 +147,6 @@ namespace Microsoft.Azure.Management.ANF.Samples
             WriteConsoleMessage($"Waiting for {primaryVolume.Id} to be available...");
             await ResourceUriUtils.WaitForAnfResource<Volume>(anfClient, primaryVolume.Id);
 
-
             //----------------------
             // Creating ANF Secondary Account
             //----------------------
@@ -193,7 +192,6 @@ namespace Microsoft.Azure.Management.ANF.Samples
                     }
                 }
             };
-
 
             //-------------------------------------------------------------
             // Creating Data Replication Volume on the Destination Account

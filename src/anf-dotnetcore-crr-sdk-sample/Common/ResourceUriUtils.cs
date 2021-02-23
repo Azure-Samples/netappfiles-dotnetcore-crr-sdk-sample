@@ -4,10 +4,13 @@
 // LICENSE file in the root directory of this source tree.
 namespace Microsoft.Azure.Management.ANF.Samples.Common
 {
+    //using Azure.Core.Diagnostics;
+    using global::Azure.Core.Diagnostics;
     using Microsoft.Azure.Management.NetApp;
     using Microsoft.Azure.Management.NetApp.Models;
     using Microsoft.Azure.Management.ResourceManager.Models;
     using System;
+    using System.Diagnostics.Tracing;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
@@ -349,6 +352,7 @@ namespace Microsoft.Azure.Management.ANF.Samples.Common
         /// <returns></returns>
         static public async Task WaitForCompleteReplicationStatus(AzureNetAppFilesManagementClient client, string resourceId, int intervalInSec = 10, int retries = 60)
         {
+            using AzureEventSourceListener listener = AzureEventSourceListener.CreateTraceLogger(EventLevel.Verbose);
             for (int i = 0; i < retries; i++)
             {
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(intervalInSec));
