@@ -1,15 +1,15 @@
 ﻿
 namespace Microsoft.Azure.Management.ANF.Samples
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using static Microsoft.Azure.Management.ANF.Samples.Common.Utils;
     using Microsoft.Azure.Management.ANF.Samples.Common;
     using Microsoft.Azure.Management.NetApp;
     using Microsoft.Azure.Management.NetApp.Models;
     using Microsoft.Azure.Management.ResourceManager;
     using Microsoft.Rest;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using static Microsoft.Azure.Management.ANF.Samples.Common.Utils;
 
     class Program
     {
@@ -17,27 +17,27 @@ namespace Microsoft.Azure.Management.ANF.Samples
         // Setting variables necessary for resources creation - change these to appropriated values related to your environment
         // Please NOTE: Resource Group and VNETs need to be created prior to run this code
         //----------------------------------------------------------------------------------------------------------------------
-
+        
         // Subscription - Change SubId below
         const string subscriptionId = "[Subscription ID]";
 
-        // Primary ANF
-        const string primaryResourceGroupName = "[Source Resource Group]";
-        const string primaryLocation = "westus";
-        const string primaryVNETName = "sourcevnet";
-        const string primarySubnetName = "sourcesubnet";
-        const string primaryAnfAccountName = "anfaccount01";
-        const string primarycapacityPoolName = "anfpool01";
-        const string primaryVolumeName = "anfvol01";
+        // Primary ANF Resources
+        const string primaryResourceGroupName = "[Primary Resource Group]";
+        const string primaryLocation = "[Location]";
+        const string primaryVNETName = "[Primary Virtual Network Name]";
+        const string primarySubnetName = "[Primary Subnet Name]";
+        const string primaryAnfAccountName = "[Primart NetApp Files Account Name]";
+        const string primarycapacityPoolName = "[Primary NetApp Files Capacity Pool Name]";
+        const string primaryVolumeName = "[Primary NetApp Files Volume Name]";
 
-        // Secondary ANF
-        const string secondaryResourceGroupName = "[Destination Resource Group]";
-        const string secondaryLocation = "eastus";
-        const string secondaryVNETName = "destinationvnet";
-        const string secondarySubnetName = "destinationsubnet";
-        const string secondaryAnfAccountName = "anfaccount02";
-        const string secondarycapacityPoolName = "anfpool02";
-        const string secondaryVolumeName = "anfvol02";
+        // Secondary ANF Resources
+        const string secondaryResourceGroupName = "[Secondary Resource Group]";
+        const string secondaryLocation = "[Secondary Location]";
+        const string secondaryVNETName = "[Secondary Virtual Network name]";
+        const string secondarySubnetName = "[Secondary Subnet Name]";
+        const string secondaryAnfAccountName = "[Secondary NetApp Files Account name]";
+        const string secondarycapacityPoolName = "[Secondary NetApp Files Capacity Pool Name]";
+        const string secondaryVolumeName = "[Secondary NetApp Files Volume]";
 
         // Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
