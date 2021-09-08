@@ -19,25 +19,25 @@ namespace Microsoft.Azure.Management.ANF.Samples
         //----------------------------------------------------------------------------------------------------------------------
 
         // Subscription - Change SubId below
-        const string subscriptionId = "f557b96d-2308-4a18-aae1-b8f7e7e70cc7";
+        const string subscriptionId = "[Subscription ID]";
 
         // Primary ANF
-        const string primaryResourceGroupName = "adghabboSource-rg";
-        const string primaryLocation = "CentralUS";
+        const string primaryResourceGroupName = "[Source Resource Group]";
+        const string primaryLocation = "westus";
         const string primaryVNETName = "sourcevnet";
         const string primarySubnetName = "sourcesubnet";
-        const string primaryAnfAccountName = "anfaccountso";
-        const string primarycapacityPoolName = "pools";
-        const string primaryVolumeName = "vols";
+        const string primaryAnfAccountName = "anfaccount01";
+        const string primarycapacityPoolName = "anfpool01";
+        const string primaryVolumeName = "anfvol01";
 
         // Secondary ANF
-        const string secondaryResourceGroupName = "adghabboDestination-rg";
-        const string secondaryLocation = "EastUS2";
+        const string secondaryResourceGroupName = "[Destination Resource Group]";
+        const string secondaryLocation = "eastus";
         const string secondaryVNETName = "destinationvnet";
         const string secondarySubnetName = "destinationsubnet";
-        const string secondaryAnfAccountName = "anfaccountd";
-        const string secondarycapacityPoolName = "poold";
-        const string secondaryVolumeName = "vold";
+        const string secondaryAnfAccountName = "anfaccount02";
+        const string secondarycapacityPoolName = "anfpool02";
+        const string secondaryVolumeName = "anfvol02";
 
         // Shared ANF Properties
         const long capacitypoolSize = 4398046511104;  // 4TiB which is minimum size
